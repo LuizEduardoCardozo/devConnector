@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb://localhost:27017/devconnector",
+    "secret": "b2zDoW11bmRvCg"
+}
