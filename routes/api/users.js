@@ -1,8 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
-const config = require('config');
 const jwt = require('jsonwebtoken');
+const request = require('request');
+const config = require('config');
 
 const {check, validationResult}  = require('express-validator');
 
@@ -60,5 +61,33 @@ router.post('/',
     }
 
 }})
+
+router.get('/github/:username', ( req, res ) => {
+    try {
+
+        const options = {
+            uri: `https://api.github.com/users/LuizEduardoCardozo/repos?per_page=5&sort=created: dec`,
+            method: 'GET',
+            headers: {'user-agent':'node-js'}
+        }
+
+        request(options,( err, githubRes, body ) => {
+
+            if(err) console.log(err);
+
+            if( githubRes.statusCode != 200 ){
+                req.stauts(404).json({err: "Github profile wasnt found!"});
+            }
+            
+        });
+        
+        return res.json(JSON.parse(body));
+
+    } catch (err) {
+
+        if(err) throw err.message;
+
+    }
+})
 
 module.exports = router;
