@@ -76,7 +76,7 @@ router.get('/github/:username', ( req, res ) => {
             if(err) console.log(err);
 
             if( githubRes.statusCode != 200 ){
-                req.stauts(404).json({err: "Github profile wasnt found!"});
+                return req.stauts(404).json({err: "Github profile wasnt found!"});
             }
             
         });
