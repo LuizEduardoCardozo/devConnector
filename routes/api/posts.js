@@ -23,7 +23,7 @@ router.post('/',
     try {
         
         const user = await User.findById(req.user.id).select('-password');
-        
+
         const text = req.body.text;
         const {name, avatar} = user;
         const userID = req.user.id;
@@ -65,6 +65,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async ( req, res ) => {
 
     const post = await Post.findById(req.params.id)
+
+    if(!post) return res.status(404).json({err: "Post not found"});
+
     res.status(300).json(post);
 
 });
