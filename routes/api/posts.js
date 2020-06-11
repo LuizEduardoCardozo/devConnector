@@ -174,9 +174,6 @@ router.put('/comment/:id', [authMiddleware, [
 
     }
 
-
-    // post.comments.unshift();
-
 });
 
 
