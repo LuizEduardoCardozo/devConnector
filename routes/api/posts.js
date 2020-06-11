@@ -135,5 +135,81 @@ router.delete('/like/:id', authMiddleware, async ( req, res ) => {
 
 });
 
+
+router.put('/comment/:id', [authMiddleware, [
+
+    check('comment', 'You need to add a comment to perform this action!').not().isEmpty()
+
+]], async ( req, res ) => {
+
+    const errs = validationResult(req);
+    if(!errs.isEmpty()) return res.send(errs);
+
+    try {
+
+        const post = await Post.findById(req.params.id);
+        const user = await User.findById(req.user.id).select('-password');
+    
+        if(!post) return res.status(404).json({err: "Post not found!"});
+        if(!user) return res.status(405).json({err: 'User not found'});
+
+        if(post.comments.filter(comment => comment.user.toString() === req.user.id).length !== 0)
+            return res.status(400).json({error: 'A user can only add a single comment by post, buddy :/'});
+        
+        const newComment = {
+            user: req.user.id,
+            text: req.body.comment,
+            name: user.name,
+            avatar: user.avatar
+        }
+    
+        post.comments.unshift(newComment);
+        await post.save()
+    
+        return res.status(300).json({success: "Ok!"});
+
+    } catch ( err ) {
+
+        if ( err ) throw err.message;
+
+    }
+
+
+    // post.comments.unshift();
+
+});
+
+
+router.delete('/comment/:id', authMiddleware, async ( req, res ) => {
+
+    try { 
+        
+        const post = await Post.findById(req.params.id);
+        const user = await User.findById(req.user.id);
+
+        if(!post) return res.status(404).json({err: 'Post not found!'});
+        if(!user) return res.status(405).json({err: 'User not found'});
+
+        if(post.comments.length === 0)
+            return res.status(501).json({err: "This post have no comments yet"});
+
+        const removeIndex = post.comments.map(c => c.user).indexOf(req.user.id);
+
+        if(post.comments[removeIndex].user.toString() !== req.user.id) 
+            return res.status(501).json({err: "You only can remove yours own posts"});
+
+        post.comments.splice(removeIndex, 1);
+        post.save();
+
+        return res.status(300).json({success: "Ok!"});
+
+    } catch ( err ) {
+        
+        if( err ) throw err.message;
+
+    }
+
+});
+
     module.exports = router;
     
