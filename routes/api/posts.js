@@ -92,6 +92,48 @@ router.delete('/:id', authMiddleware, async ( req, res ) => {
 
 });
 
+router.put('/like/:id', authMiddleware, async ( req, res ) => {
+
+    try { 
+        
+        const post = await Post.findById(req.params.id);
+
+        if(!post) return res.status(404).json({error: "Post not found!"});
+
+        post.likes.map(like => {if(like.user.toString() === req.user.id) 
+            return res.status(400).json({err: "Post was aleredy liked by the user!"}) });
+
+
+        post.likes.unshift({user: req.user.id});
+        await post.save()
+
+        return res.status(300).json({success: true});
+
+    } catch ( err ) {
+
+        if( err ) throw err.message;
+
+    }
+
+});
+
+
+router.delete('/like/:id', authMiddleware, async ( req, res ) => {
+
+    const post = await Post.findById(req.params.id);
+
+    if(!post) return res.status(404).json({err: "The post wasn't found!"});
+
+    const removeIndex = post.likes.map(like => like.user).indexOf(req.params.id);
+
+    if(post.likes.length === 0) return res.status(404).json({err: "You have not commented on this post yet!"});
+
+    post.likes.splice(removeIndex)
+    post.save();
+
+    return res.status(404).json({success: true});
+
+});
 
     module.exports = router;
     
