@@ -1,9 +1,60 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 // import { Container } from './styles';
 
 function Login() {
-  return (<h1>Login</h1>);
+
+  const [loginForm, setLoginForm] = useState({
+      email: '',
+      password: '',
+  });
+
+  const onChange = (e) => setLoginForm({...loginForm, [e.target.name]: e.target.value});
+  const onSubmit = (e) => {
+      e.preventDefault();
+      console.log(loginForm);
+  }
+
+  const {email,password,} = loginForm;
+
+  return (
+
+    <section class="container">
+      <div class="alert alert-danger">
+        Invalid credentials
+      </div>
+      <h1 class="large text-primary">Sign In</h1>
+      <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
+      <form class="form" action="dashboard.html" onSubmit={(e) => onSubmit(e)}>
+        <div class="form-group">
+          <input
+            type="email"
+            placeholder="Email Address"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => onChange(e)}
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={(e) => onChange(e)}
+          />
+        </div>
+        <input type="submit" class="btn btn-primary" value="Login" />
+      </form>
+      <p class="my-1">
+        Don't have an account? <Link to="register">Sign Up</Link>
+      </p>
+    </section>
+
+  );
 }
 
 export default Login;
