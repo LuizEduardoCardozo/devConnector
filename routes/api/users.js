@@ -53,7 +53,7 @@ router.post('/',
 
             await jwt.sign(payload, config.get('secret'), {expiresIn: 36000 }, (err, token) => {
                 if(err) return res.status(400).sendStatus(err);
-                return res.status(300).json({success: "User registred!", token});
+                return res.json({success: "User registred!", token});
             });
 
     }catch(err) {
