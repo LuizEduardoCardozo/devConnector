@@ -16,18 +16,21 @@ router.get('/me', authMiddleware, async (req,res) => {{
 
     try {
 
-        const profile = await ProfileFiels.findOne({user: req.user.id}).populate('user',['name','avatar']);
+        /* console.log(req.user.id);
+         const profile = await Profile.findById(req.user.id); */
 
-        if(!profile) return res.status(400).json({ err: "There is no profile for this user registered on the databases"});
+        const profile = await Profile.findOne({user: req.user.id}).populate('user',['name','avatar']);
 
-        res.json(profile);
+        if(!profile) return res.status(403).json({ err: "There is no profile for this user registered on the databases"});
+
+        return res.json(profile);
 
     }catch (err) {
+
         if(err) throw err.message;
         return res.status(400).send(err);
     }
 
-    return res.json({msg: "ok!"});
 }});
 
 

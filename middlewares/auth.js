@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 module.exports = (req,res,nxt) => {
-
+    
     const token = req.header('x-auth-token');
     if(!token) res.status(400).json({err: "No token provided"});
 
@@ -11,7 +11,7 @@ module.exports = (req,res,nxt) => {
         req.user = decoded.user;
         nxt();
     }catch (err) { 
-        res.status(401).json({err: "The user wasn't authorized"});
+        return res.status(401).json({err: "The user wasn't authorized"});
     }
 
 };

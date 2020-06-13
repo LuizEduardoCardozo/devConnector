@@ -1,7 +1,31 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from './types';
+import { setAuthToken } from '../utils/setAuthToken';
+
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR } from './types';
+
+// Load a user to memory :)
+export const loadUser = () => async dispatch => {
+
+    if(localStorage.token) {
+        setAuthToken(localStorage.token)
+    }
+
+    try {
+
+        const res = await axios.get('http://localhost:3001/api/auth');
+        dispatch({type: USER_LOADED, payload: res.data});
+
+    } catch ( err ) {
+
+        if( err ) throw err.message;
+        dispatch({ type: AUTH_ERROR });
+
+    }
+
+}
+
 
 // Register user
 export const register = ({name, email, password}) => async dispatch => {
@@ -11,6 +35,7 @@ export const register = ({name, email, password}) => async dispatch => {
 
     try {
         
+        loadUser()
         const res = await axios.post('http://localhost:3001/api/users',body,config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data });
         dispatch( setAlert("Usuário cadastrado com sucesso!", 'success', 1500));
@@ -40,6 +65,7 @@ export const login = (email, password) => async dispatch => {
     try {
 
         const res = await axios.post('http://localhost:3001/api/auth', body, config);
+        loadUser()
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
         // dispatch( loadUser() );
 
