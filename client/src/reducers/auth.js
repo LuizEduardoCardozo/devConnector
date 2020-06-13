@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL } from '../actions/types';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, AUTH_ERROR } from '../actions/types';
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -14,11 +14,22 @@ export default function( state = initialState, action ) {
     switch(type) {
         case REGISTER_SUCCESS:
             localStorage.setItem('token', payload.token);
-            return { ...state, ...payload ,isAuthenticated: true, loading: true }
+            return { ...state, ...payload ,isAuthenticated: true, loading: true };
 
         case REGISTER_FAIL:
-            localStorage.removeItem('token') 
-            return { ...state, token: null ,isAuthenticated: false, loading: false }
+            localStorage.removeItem('token');
+            return { ...state, token: null ,isAuthenticated: false, loading: false };
+
+        case LOGIN_SUCCESS:
+            localStorage.setItem('token', payload.token);
+            return {...state, ...payload ,isAuthenticated: true, loading: false};
+
+        case LOGIN_FAIL:
+            localStorage.removeItem('token');
+            return {...state, ...payload, token: null ,isAuthenticated: false, loading: false};
+
+        case AUTH_ERROR:
+            console.log("Auth error, please, check the auth in the reducer!");
 
         default:
             return state;

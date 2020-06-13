@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import {login} from '../../actions/auth';
 
 // import { Container } from './styles';
 
-function Login() {
+function Login({ login, isAuthenticated }) {
 
   const [loginForm, setLoginForm] = useState({
       email: '',
@@ -15,9 +19,17 @@ function Login() {
   const onSubmit = (e) => {
       e.preventDefault();
       console.log(loginForm);
+      login(email, password);
+
   }
 
   const {email,password,} = loginForm;
+
+  // Redirect if logged in
+
+  if(isAuthenticated) {
+    return <Redirect to='/dashboard' />
+  }
 
   return (
 
@@ -57,4 +69,17 @@ function Login() {
   );
 }
 
-export default Login;
+login.PropTypes = {
+
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+
+};
+
+const mapStateToProp = state => ({
+
+  isAuthenticated: state.auth.isAuthenticated,
+
+});
+
+export default connect( mapStateToProp, { login } )(Login);
