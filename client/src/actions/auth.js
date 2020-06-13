@@ -22,6 +22,7 @@ export const register = ({name, email, password}) => async dispatch => {
 
         if ( errs ) {
             dispatch( setAlert(errs, 'danger', 5000));
+            dispatch( { type: LOGIN_FAIL, payload: errs } );
         }
 
         dispatch({ type: REGISTER_FAIL });

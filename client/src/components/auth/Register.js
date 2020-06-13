@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
@@ -93,4 +92,4 @@ const mapStateToProp = state => ({
 
 });
 
-export default connect(null, { setAlert, register })(Register);
+export default connect(mapStateToProp, { setAlert, register })(Register);

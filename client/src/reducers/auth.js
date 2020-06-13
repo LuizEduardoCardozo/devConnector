@@ -29,10 +29,12 @@ export default function( state = initialState, action ) {
             return {...state, ...payload, token: null ,isAuthenticated: false, loading: false};
 
         case AUTH_ERROR:
-            console.log("Auth error, please, check the auth in the reducer!");
+            localStorage.removeItem('token');
+            return {...state, ...payload, token: null ,isAuthenticated: false, loading: false};
 
         default:
             return state;
+
     }
 
 }
