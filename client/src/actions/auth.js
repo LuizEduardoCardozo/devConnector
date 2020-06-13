@@ -22,7 +22,7 @@ export const register = ({name, email, password}) => async dispatch => {
 
         if ( errs ) {
             dispatch( setAlert(errs, 'danger', 5000));
-            dispatch( { type: LOGIN_FAIL, payload: errs } );
+            dispatch( { type: REGISTER_FAIL, payload: errs } );
         }
 
         dispatch({ type: REGISTER_FAIL });
@@ -42,11 +42,11 @@ export const login = (email, password) => async dispatch => {
         const res = await axios.post('http://localhost:3001/api/auth', body, config);
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
         // dispatch( loadUser() );
-        console.log(res);
 
     } catch ( err ) {
-
-        console.log("error", err);
+        // console.log("error", err);
+        dispatch( setAlert('Invalid credentials!', 'danger') );
+        dispatch( { type: LOGIN_FAIL, payload: err } );
 
     }
 

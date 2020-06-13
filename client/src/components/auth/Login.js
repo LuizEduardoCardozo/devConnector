@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {login} from '../../actions/auth';
+import { login }  from '../../actions/auth';
 
 // import { Container } from './styles';
 
@@ -17,9 +17,7 @@ function Login({ login, isAuthenticated }) {
   const onChange = (e) => setLoginForm({...loginForm, [e.target.name]: e.target.value});
   const onSubmit = (e) => {
       e.preventDefault();
-      console.log(loginForm);
       login(email, password);
-
   }
 
   const {email,password,} = loginForm;
@@ -33,9 +31,6 @@ function Login({ login, isAuthenticated }) {
   return (
 
     <section class="container">
-      <div class="alert alert-danger">
-        Invalid credentials
-      </div>
       <h1 class="large text-primary">Sign In</h1>
       <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
       <form class="form" action="dashboard.html" onSubmit={(e) => onSubmit(e)}>

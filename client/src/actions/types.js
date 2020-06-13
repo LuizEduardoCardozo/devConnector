@@ -12,3 +12,4 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 
 /* Auth */
 export const AUTH_ERROR = 'AUTH_ERROR';
+export const LOGOUT = 'LOGOUT';
