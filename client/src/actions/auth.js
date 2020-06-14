@@ -35,7 +35,7 @@ export const register = ({name, email, password}) => async dispatch => {
 
     try {
         
-        loadUser()
+        dispatch( loadUser() );
         const res = await axios.post('http://localhost:3001/api/users',body,config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data });
         dispatch( setAlert("Usuário cadastrado com sucesso!", 'success', 1500));
@@ -65,9 +65,8 @@ export const login = (email, password) => async dispatch => {
     try {
 
         const res = await axios.post('http://localhost:3001/api/auth', body, config);
-        loadUser()
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
-        // dispatch( loadUser() );
+        dispatch( loadUser() );
 
     } catch ( err ) {
         // console.log("error", err);

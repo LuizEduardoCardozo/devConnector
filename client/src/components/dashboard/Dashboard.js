@@ -3,20 +3,36 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Spinner from '../Layout/Spinner';
+
 import { getCurrentProfile } from '../../actions/profiles';
+import { Link } from 'react-router-dom';
 
 // import { Container } from './styles';
 
-const Dashboard = ({getCurrentProfile, auth, profile}) => {
+const Dashboard = ({getCurrentProfile, auth, profile }) => {
 
   useEffect(() => {
     getCurrentProfile()
   },[]);
 
+  const {name} = auth.user
+  console.log(name);
+  
+
   return (
-    <div>
-        <h1>Dashboard!</h1>
-    </div>
+    profile.loading && profile === null ? < Spinner /> : 
+    <>
+      <h1 className="large textPrimary">DashBoard</h1>
+      <p className="lead">
+        <i className="fas fa-user">Welcome {name}</i>
+      </p>
+      { profile.profile !== null ? <>Has</> : 
+      <>
+        <p>You have not setup a profile yet :( Please, click here and add some info</p>
+        <Link to="/create-profile" className="btn btn-primary my-1">Create profile</Link>
+      </> }    
+    </>
   );
 }
 

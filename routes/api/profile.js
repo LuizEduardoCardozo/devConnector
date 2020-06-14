@@ -15,12 +15,9 @@ const router = express.Router();
 router.get('/me', authMiddleware, async (req,res) => {{
 
     try {
-
-        /* console.log(req.user.id);
-         const profile = await Profile.findById(req.user.id); */
-
-         const profile = await Profile.findOne({user: req.user.id}).populate('user',['name','avatar']);
-
+         console.log("user id - profile route -",req.user.id);
+        /* const profile = await Profile.findById(req.user.id); */
+        const profile = await Profile.findOne({user: req.user.id}).populate('user',['name','avatar']);
         if(!profile) return res.status(403).json({ err: "There is no profile for this user registered on the databases"});
 
         return res.json(profile);
