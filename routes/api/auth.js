@@ -21,7 +21,6 @@ router.get('/', authMiddleware , async (req,res) => {{
         res.send(user);
 
     } catch (err) {
-        console.log(err);
         return res.status(500).json({ err: "Server error" });
     }
 
@@ -54,7 +53,6 @@ router.post('/',
         }
         
         jwt.sign(payload, config.get('secret'), {expiresIn: 36000},  (err,token) => {
-            console.log(token);
             if(err) return res.status(400).send(err);
             return res.json({token});
         });
