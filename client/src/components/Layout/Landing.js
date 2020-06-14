@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 function Landing({ isAuthenticated }) {
   
   if(isAuthenticated) {
-      <Redirect to="/dashboard" />
+      return <Redirect to="/dashboard" />;
   }
 
   return (
