@@ -13,7 +13,7 @@ export const getCurrentProfile = () => async dispatch => {
         dispatch({ type: GET_PROFILE, payload: res.data });
 
     } catch (error) {
-
+        
         const { statusText , status} = error.response;
         dispatch({type: PROFILE_ERROR, payload: {msg: statusText, status} })
  
@@ -31,22 +31,19 @@ export const createProfile = (formData, hisory, edit = false) => async dispatch 
     };
     
     try {
-      
+        
         const res = await axios.post('http://localhost:3001/api/profile',formData, config);
         dispatch({type: GET_PROFILE, payload: res.data});
         
-        dispatch( setAlert(edit ? 'Profile updated' : 'Profile created') );
+        dispatch( setAlert(edit ? 'Profile updated' : 'Profile created', 'success', 3000) );
 
         if( !edit ) {
             hisory.push('/dashboard');
         }
 
-        console.log("FOI");
-
     } catch ( err ) {
-
-        if( err ) throw err.message;
-        dispatch({type: PROFILE_ERROR, payload: { msg: err.message, status: err.response.status }});
+        const erors = err.response.data.errors;
+        erors.forEach(error => dispatch( setAlert(error.msg, 'danger', 5000) ));
         
     }
 

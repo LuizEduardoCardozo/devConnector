@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import DashboardActions from './DashboardActions';
+
 import Spinner from '../Layout/Spinner';
 
 import { getCurrentProfile } from '../../actions/profiles';
@@ -35,7 +37,10 @@ const Dashboard = ({getCurrentProfile, auth, profile }) => {
       <p className="lead">
         <i className="fas fa-user">Welcome {name}</i>
       </p>
-      { profile.profile !== null ? <>Has</> : 
+      { profile.profile !== null ? 
+      <>
+        <DashboardActions />
+      </> : 
       <>
         <p>You have not setup a profile yet :( Please, click here and add some info</p>
         <Link to="/create-profile" className="btn btn-primary my-1">Create profile</Link>

@@ -15,16 +15,16 @@ const router = express.Router();
 router.get('/me', authMiddleware, async (req,res) => {{
 
     try {
-         console.log("user id - profile route -",req.user.id);
+        //  console.log("user id - profile route -",req.user.id);
         /* const profile = await Profile.findById(req.user.id); */
+        
         const profile = await Profile.findOne({user: req.user.id}).populate('user',['name','avatar']);
         if(!profile) return res.status(404).json({ err: "There is no profile for this user registered on the databases"});
-
+        
         return res.json(profile);
 
-    }catch (err) {
-
-        if(err) throw err.message;
+    }catch ( err ) {
+        // if(err) throw err.message;
         return res.status(400).send(err);
     }
 
@@ -39,7 +39,7 @@ router.post('/',
     ], 
     async (req, res) => {
         const errors = validationResult(req);
-        //if(errors.isEmpty()) return res.status(400).json({errs: errors.array()});
+        if(!errors.isEmpty()) return res.status(300).json(errors);
 
         const {
             user,
@@ -79,8 +79,6 @@ router.post('/',
         if(facebook) profileFiels.social.facebook = facebook;
         if(linkedin) profileFiels.social.linkedin = linkedin;
         if(instagram) profileFiels.social.instagram = instagram;
-
-        // console.log(profileFiels);
 
         try {
 

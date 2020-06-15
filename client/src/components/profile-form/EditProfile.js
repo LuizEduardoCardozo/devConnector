@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
 import PropTypes from 'prop-types';
 
-import { createProfile } from '../../actions/profiles';
+import { createProfile, getCurrentProfile } from '../../actions/profiles';
 
 // import { Container } from './styles';
 
-const CreateProfile = ({ createProfile, history }) => {
+const EditProfile = ({ profile: {profile, loading}, createProfile, getCurrentProfile, history }) => {
 
   const [ formData, setFormData ] = useState({
       company: '', 
@@ -26,6 +26,25 @@ const CreateProfile = ({ createProfile, history }) => {
   });
 
   const [ displaySocialImputs, toggleSocialImputs ] = useState(false);
+
+  useEffect(() => {
+      getCurrentProfile()
+      setFormData({
+        company:  loading || !profile.company   ? '' : profile.company,
+        website:  loading || !profile.website   ? '' : profile.website,
+        location: loading || !profile.location  ? '' : profile.location,
+        status:   loading || !profile.status    ? '' : profile.status,
+        skills:   loading || !profile.skills    ? '' : profile.skills.join(),
+        bio:      loading || !profile.bio       ? '' : profile.bio,
+        githubusername: loading || !profile.githubusername ? '' : profile.githubusername,
+        youtube:  loading || !profile.youtube   ? '' : profile.youtube,
+        twitter:  loading || !profile.twitter   ? '' : profile.twitter,
+        facebook: loading || !profile.facebook  ? '' : profile.facebook,
+        linkedin: loading || !profile.linkedin  ? '' : profile.linkedin,
+        instagram:loading || !profile.instagram ? '' : profile.instagram,
+      });
+      
+  }, [])
 
   const {
     company, 
@@ -46,12 +65,14 @@ const CreateProfile = ({ createProfile, history }) => {
   const onSubmit = e => {
     e.preventDefault(); 
     try {
-      
-      createProfile(formData, history)
-      
+
+      console.log(formData);
+      createProfile(formData, history, true);
       
     } catch (error) {
+      
       if ( error ) console.log("Deu merda!");
+
     }
     
   };
@@ -113,8 +134,8 @@ const CreateProfile = ({ createProfile, history }) => {
             type="text"
             placeholder="Github Username"
             name="githubusername"
-            value={githubusername} onChange={e => onChange(e)} 
-          />
+            value={githubusername} onChange={ e => onChange(e) } 
+          /> 
           <small class="form-text"
             >If you want your latest repos and a Github link, include your
             username</small
@@ -168,10 +189,16 @@ const CreateProfile = ({ createProfile, history }) => {
     );
 }
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
 
-    createProfile: PropTypes.func,
+    createProfile: PropTypes.func.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
 
 }
 
-export default connect( null , { createProfile })(withRouter(CreateProfile));
+const mapStateToProps = state => ({
+    profile: state.profile,
+});
+
+export default connect( mapStateToProps , { createProfile, getCurrentProfile })(withRouter(EditProfile));
