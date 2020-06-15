@@ -8,9 +8,11 @@ import Alert from './components/Layout/Alert';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 
+import PrivateRoute from './components/dashboard/privateRoute';
+
 import Dashboard from './components/dashboard/Dashboard';
 
-import PrivateRoute from './components/dashboard/privateRoute';
+import CreateProfile from './components/profile-form/CreateProfile';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -43,6 +45,7 @@ function App() {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            <PrivateRoute exact path="/create-profile" component={CreateProfile} />
           </Switch>
         </section>
       </Router>

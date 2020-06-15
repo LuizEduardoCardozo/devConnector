@@ -16,9 +16,17 @@ const Dashboard = ({getCurrentProfile, auth, profile }) => {
     getCurrentProfile()
   },[]);
 
-  const {name} = auth.user
-  console.log(name);
+  let name = '';
   
+  try {
+
+      name = auth.user.name;
+    
+  } catch ( err ) {
+
+    name = "Not Found!";
+    
+  }
 
   return (
     profile.loading && profile === null ? < Spinner /> : 

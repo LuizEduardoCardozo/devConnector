@@ -18,7 +18,7 @@ router.get('/me', authMiddleware, async (req,res) => {{
          console.log("user id - profile route -",req.user.id);
         /* const profile = await Profile.findById(req.user.id); */
         const profile = await Profile.findOne({user: req.user.id}).populate('user',['name','avatar']);
-        if(!profile) return res.status(403).json({ err: "There is no profile for this user registered on the databases"});
+        if(!profile) return res.status(404).json({ err: "There is no profile for this user registered on the databases"});
 
         return res.json(profile);
 
