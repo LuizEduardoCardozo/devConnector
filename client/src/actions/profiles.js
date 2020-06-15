@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import { setAlert } from './alert';
+import { setAlert } from './alert';
 
 import { GET_PROFILE, PROFILE_ERROR } from './types';
 
@@ -18,5 +18,38 @@ export const getCurrentProfile = () => async dispatch => {
         dispatch({type: PROFILE_ERROR, payload: {msg: statusText, status} })
  
     }
+
+}
+
+// Create or update a profile
+export const createProfile = (formData, hisory, edit = false) => async dispatch => {
+
+    const config = {
+        headers: {
+            'Content-type': 'application/json',
+        },
+    };
+    
+    try {
+      
+        const res = await axios.post('http://localhost:3001/api/profile',formData, config);
+        dispatch({type: GET_PROFILE, payload: res.data});
+        
+        dispatch( setAlert(edit ? 'Profile updated' : 'Profile created') );
+
+        if( !edit ) {
+            hisory.push('/dashboard');
+        }
+
+        console.log("FOI");
+
+    } catch ( err ) {
+
+        if( err ) throw err.message;
+        dispatch({type: PROFILE_ERROR, payload: { msg: err.message, status: err.response.status }});
+        
+    }
+
+
 
 }
