@@ -35,7 +35,7 @@ export const createProfile = (formData, hisory, edit = false) => async dispatch 
         const res = await axios.post('http://localhost:3001/api/profile',formData, config);
         dispatch({type: GET_PROFILE, payload: res.data});
         
-        dispatch( setAlert(edit ? 'Profile updated' : 'Profile created', 'success', 3000) );
+        dispatch( setAlert(edit ? 'Profile updated' : 'Profile created', 'success', edit ? 7000 : 3000) );
 
         if( !edit ) {
             hisory.push('/dashboard');

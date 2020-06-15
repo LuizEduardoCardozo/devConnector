@@ -63,15 +63,16 @@ const EditProfile = ({ profile: {profile, loading}, createProfile, getCurrentPro
 
   const onChange = e => setFormData({...formData,[e.target.name]: e.target.value});
   const onSubmit = e => {
+
     e.preventDefault(); 
+
     try {
 
-      console.log(formData);
       createProfile(formData, history, true);
       
-    } catch (error) {
+    } catch ( err ) {
       
-      if ( error ) console.log("Deu merda!");
+      if ( err ) throw err.message;
 
     }
     
